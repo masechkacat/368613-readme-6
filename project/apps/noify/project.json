@@ -1,0 +1,24 @@
+{
+  "name": "noify",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/noify/src",
+  "projectType": "application",
+  "targets": {
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "noify:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "noify:build:development"
+        },
+        "production": {
+          "buildTarget": "noify:build:production"
+        }
+      }
+    }
+  },
+  "tags": []
+}
