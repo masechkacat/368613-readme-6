@@ -3,10 +3,11 @@ import { Body, Controller, Get, HttpStatus, Param, Post } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { LoginUserDto } from '../dto/login-user.dto';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LoggedUserRdo } from '../rdo/logged-user.rdo';
 import { UserRdo } from '../rdo/user.rdo';
 
+@ApiTags('authentification')
 @Controller('auth')
 export class AuthenticationController {
   constructor(
