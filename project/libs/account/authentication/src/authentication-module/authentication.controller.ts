@@ -6,6 +6,8 @@ import { LoginUserDto } from '../dto/login-user.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LoggedUserRdo } from '../rdo/logged-user.rdo';
 import { UserRdo } from '../rdo/user.rdo';
+import { fillDto } from '@project/helpers';
+import { ChangePasswordDto } from '../dto/change-password.dto';
 
 @ApiTags('authentification')
 @Controller('auth')
@@ -21,7 +23,7 @@ export class AuthenticationController {
   @Post('register')
   public async create(@Body() dto: CreateUserDto) {
     const newUser = await this.authService.register(dto);
-    return newUser.toPOJO();
+    return fillDto(UserRdo, newUser.toPOJO());
   }
 
   @ApiResponse({
@@ -36,7 +38,7 @@ export class AuthenticationController {
   @Post('login')
   public async login(@Body() dto: LoginUserDto) {
     const verifiedUser = await this.authService.verifyUser(dto);
-    return verifiedUser.toPOJO();
+    return fillDto(LoggedUserRdo, verifiedUser.toPOJO());
   }
 
   @ApiResponse({
@@ -47,6 +49,24 @@ export class AuthenticationController {
   @Get(':id')
   public async show(@Param('id') id: string) {
     const existUser = await this.authService.getUser(id);
-    return existUser.toPOJO();
+    return fillDto(UserRdo, existUser.toPOJO());
+  }
+
+  @Post('change-password')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Password changed successfully.',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'User not found.',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Invalid request.',
+  })
+  public async changePassword(@Body() dto: ChangePasswordDto) {
+    await this.authService.changePassword(dto);
+    return { message: 'Password changed successfully.' };
   }
 }

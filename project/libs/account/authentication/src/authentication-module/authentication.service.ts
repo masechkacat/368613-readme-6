@@ -5,6 +5,7 @@ import { BlogUserRepository, BlogUserEntity } from '@project/blog-user';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { AUTH_USER_EXISTS, AUTH_USER_NOT_FOUND, AUTH_USER_PASSWORD_WRONG } from './authentication.constant';
 import { LoginUserDto } from '../dto/login-user.dto';
+import { ChangePasswordDto } from '../dto/change-password.dto';
 
 @Injectable()
 export class AuthenticationService {
@@ -55,5 +56,18 @@ export class AuthenticationService {
 
   public async getUser(id: string) {
     return this.blogUserRepository.findById(id);
+  }
+
+  public async changePassword(dto: ChangePasswordDto): Promise<void> {
+    const {id, oldPassword, newPassword} = dto;
+    const userEntity = await this.blogUserRepository.findById(id);
+    if (!userEntity) {
+      throw new NotFoundException(`User not found`);
+    }
+    if (!await userEntity.comparePassword(oldPassword)) {
+      throw new UnauthorizedException(`Invalid request`);
+    }
+    await userEntity.setPassword(newPassword);
+    await this.blogUserRepository.update(userEntity);
   }
 }

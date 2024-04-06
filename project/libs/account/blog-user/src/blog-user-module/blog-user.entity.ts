@@ -1,7 +1,6 @@
 import { Entity } from '@project/core';
 import { StorableEntity, AuthUser } from '@project/core';
 import { genSalt, hash, compare } from 'bcrypt';
-import { randomUUID } from 'node:crypto';
 import { SALT_ROUNDS } from './blog-user.constants';
 
 
@@ -21,7 +20,7 @@ export class BlogUserEntity extends Entity implements StorableEntity<AuthUser> {
       return;
     }
 
-    this.id = user.id ?? this.id;
+    this.id = user.id; //?? this.id;
     this.avatar = user.avatar;
     this.email = user.email;
     this.fullname = user.fullname;

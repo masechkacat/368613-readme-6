@@ -1,20 +1,20 @@
 import { ClassTransformOptions, plainToInstance } from 'class-transformer';
 
-type PlainObject = Record<string, unknown>;
+type PlainObject<T> = Record<keyof T, unknown>;
 
-export function fillDto<T, V extends PlainObject>(
+export function fillDto<T, V extends Partial<PlainObject<T>>>(
   DtoClass: new () => T,
   plainObject: V,
   options?: ClassTransformOptions,
 ): T;
 
-export function fillDto<T, V extends PlainObject[]>(
+export function fillDto<T, V extends Partial<PlainObject<T>>>(
   DtoClass: new () => T,
   plainObject: V,
   options?: ClassTransformOptions,
 ): T[];
 
-export function fillDto<T, V extends PlainObject>(
+export function fillDto<T, V extends Partial<PlainObject<T>>>(
   DtoClass: new () => T,
   plainObject: V,
   options?: ClassTransformOptions,
